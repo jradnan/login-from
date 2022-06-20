@@ -38,5 +38,6 @@
 }
 
 .registration{
-  border: 2px solid #CED4DA;
+  /* border: 2px solid #CED4DA; */
+  background-color: whitesmoke;
 }
