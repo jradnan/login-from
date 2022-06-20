@@ -1,5 +1,5 @@
 import './App.css';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +12,8 @@ function App() {
   const [registered, setRegistered] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [gmail, sendGmail] = useState ('')
+  const [reset, setReset] = useState('')
 
   const handleEmailBlur = event =>{
     setEmail(event.target.value)
@@ -55,6 +57,7 @@ function App() {
         const user = result.user;
         setEmail('')
         setPassword('')
+        emailVarification()
         console.log(user)
       })
       .catch(error=>{
@@ -71,8 +74,27 @@ function App() {
     setRegistered(event.target.checked)
   }
 
-
- 
+  const emailVarification = () =>{
+    sendEmailVerification(auth.currentUser)
+    .then(() => {
+      // Email verification sent!
+      // ...
+      sendGmail('A mail has been sent')
+    });
+    }
+  const resetPassword = () =>{
+    sendPasswordResetEmail(auth, email)
+    .then(() => {
+      // Password reset email sent!
+      setReset ('Password reset email has been sent')
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      
+      // ..
+    });
+  }
 
   return (
     <div>
@@ -100,11 +122,13 @@ function App() {
               <Form.Group className="mb-3"         controlId="formBasicCheckbox">
               <Form.Check onChange={handleRegisteredChange} type="checkbox" label="Allready Registered?" />
              </Form.Group>
-          
+           <Button onClick={resetPassword} variant="link">Reset password?</Button>
           <Button  variant="primary" type="submit">
-            {registered ? 'Login' : 'Register'}
+            {registered ? 'Login' :  'Register' }
           </Button>
         </Form>
+        <div className='mt-5'><h1 className='text-danger'>{gmail}</h1></div>
+        <div><h4 className='text-danger'>{reset}</h4></div>
       </div>
     </div>
   );
