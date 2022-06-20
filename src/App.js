@@ -11,9 +11,14 @@ function App() {
   const [validated, setValidated] = useState(false);
   const [registered, setRegistered] = useState(false)
   const [email, setEmail] = useState('')
+  const [name, setName] = useState ('')
   const [password, setPassword] = useState('')
   const [gmail, sendGmail] = useState ('')
   const [reset, setReset] = useState('')
+
+  const handleNameBlur = event =>{
+    console.log(event.target.value)
+  }
 
   const handleEmailBlur = event =>{
     setEmail(event.target.value)
@@ -101,6 +106,14 @@ function App() {
       <div className="registration w-50 mx-auto mt-5">
         <h1 className='text-primary'>Please {registered ?'Login': 'Register'}</h1>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+          {!registered &&<Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Your Name</Form.Label>
+            <Form.Control required onBlur={handleNameBlur} type="text" placeholder="Enter Your Name" />
+            
+            <Form.Control.Feedback type='invalid'>
+              Please provide your name.
+            </Form.Control.Feedback>
+          </Form.Group>}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control required onBlur={handleEmailBlur} type="email" placeholder="Enter email" />
